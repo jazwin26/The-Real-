@@ -1,0 +1,34 @@
+library(tidyverse)
+library(dplyr)
+
+iNat <- read_csv("iNat Data.csv")
+Andy <- read_csv("eBut_ah.csv")
+Az <- read_csv("eBut_az.csv")
+
+iNat %>% 
+  select(latitude, longitude, taxon_species_name, observed_on) %>%
+  dplyr::rename(Latitude = latitude,
+    Longitude = longitude,
+    Species = taxon_species_name,
+    `Date Observed` = observed_on)%>%
+  cbind(Site = "iNat")
+
+Andy %>% 
+  select(Latitude, Longitude, Species, `Date Observed`) %>%
+    cbind(Site = "Tohono Chul")
+
+new_Az <- Az %>%
+  select(Latitude, Longitude, Species, `Date Observed`) %>%
+  cbind(Site = "eBut")
+
+view(new_Az)
+
+unique(new_Az$Latitude & new_Az$Longitude, incomparables = FALSE)
+
+view(new_Az %>% 
+  unique(new_Az$Latitude & new_Az$Longitude, incomparables = FALSE))
+
+
+new_Az %>%
+  select(Species), sum(case_when
+     
