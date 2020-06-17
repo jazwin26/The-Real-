@@ -1,0 +1,162 @@
+Species,eBut,iNaturalist,Tohono Chul
+Abaeis nicippe,0,67,0
+acastus,1,0,0
+acmon,1,0,0
+Adelpha eulalia,0,2,0
+agarithe,0,0,41
+Agraulis vanillae,0,46,0
+albescens,2,0,11
+Amblyscirtes nysa,0,1,0
+annabella,0,0,1
+Anthanassa texana,0,99,0
+Anthocharis cethura,0,2,0
+Anthocharis thoosa,0,11,0
+antiopa,1,0,1
+Apodemia mormo,0,1,0
+Apodemia palmerii,0,11,0
+arizonensis,0,0,2
+Asterocampa celtis,0,14,0
+Asterocampa leilia,0,96,0
+astyalus,0,0,1
+atalanta,1,0,1
+Atlides halesus,0,32,0
+Atrytonopsis edwardsi,0,2,0
+augustinus,2,0,0
+aurantiaca,1,0,4
+Battus philenor,0,100,0
+boisduvaliana,0,0,6
+Brephidium exilis,0,54,0
+Burnsius albescens,0,11,0
+Calephelis arizonensis,0,4,0
+Calephelis nemesis,0,16,0
+Callophrys gryneus,0,6,0
+cardui,5,0,61
+carinenta,8,0,119
+catullus,0,0,3
+Celastrina echo,0,15,0
+Celotes nessus,0,2,0
+celtis,0,0,1
+ceos,2,0,0
+ceraunus,2,0,52
+cesonia,7,0,137
+cethura,3,0,0
+charithonia,0,0,1
+Chiomara georgina,0,4,0
+Chlosyne lacinia,0,15,0
+claudia,2,0,3
+clorinde,1,0,0
+coenia,5,0,4
+Cogia hippalus,0,3,0
+Colias eurytheme,0,15,0
+Copaeodes aurantiaca,0,13,0
+cyneas,0,0,1
+Danaus gilippus,0,239,0
+Danaus plexippus,0,99,0
+domicella,2,0,1
+dorantes,0,0,1
+dymas,5,0,31
+Dymasia dymas,0,30,0
+Echinargus isola,0,36,0
+echo,4,0,24
+elada,2,0,15
+Erynnis funeralis,0,30,0
+Erynnis tristis,0,1,0
+Euchloe lotta,0,2,0
+eufala,0,0,13
+eulalia,1,0,1
+Euptoieta claudia,0,11,0
+Euptoieta hegesia,0,1,0
+Eurema boisduvaliana,0,1,0
+Eurema mexicana,0,8,0
+eurytheme,0,0,8
+exilis,0,0,3
+funeralis,3,0,26
+genoveva,1,0,1
+gilippus,8,0,240
+grynea,2,0,0
+halesus,0,0,15
+Heliopetes domicella,0,7,0
+Heliopetes ericetorum,0,1,0
+Hemiargus ceraunus,0,45,0
+hippalus,0,0,3
+Hylephila phyleus,0,70,0
+Icaricia lupini,0,9,0
+iole,8,0,138
+isola,2,0,23
+istapa,1,0,1
+Junonia coenia,0,29,0
+Junonia nigrosuffusa,0,7,0
+Kricogonia lyside,0,1,0
+lacinia,2,0,11
+ladon,2,0,3
+leda,1,0,12
+leilia,6,0,124
+Leptotes marina,0,71,0
+Lerema accius,0,1,0
+Lerodea arabus,0,3,0
+Lerodea eufala,0,22,0
+Libytheana carinenta,0,106,0
+Limenitis archippus,0,1,0
+Limenitis arthemis astyanax,2,0,0
+lotta,2,0,0
+lyside,0,0,7
+marina,9,0,206
+Marpesia petreus,0,1,0
+melinus,5,0,51
+Mestra amymone,0,2,0
+mexicana,3,0,123
+Ministrymon leda,0,27,0
+mormo,2,0,0
+multicaudata,6,0,1
+Nathalis iole,0,55,0
+nemesis,2,0,86
+nessus,1,0,0
+nicippe,8,0,182
+Nymphalis antiopa,0,9,0
+pacuvius,1,0,0
+palmerii,1,0,12
+Papilio multicaudata,0,5,0
+Papilio pallas,0,1,0
+Papilio polyxenes,0,16,0
+Papilio rumiko,0,109,0
+philenor,13,0,212
+philetas,1,0,0
+Phoebis agarithe,0,2,0
+Phoebis sennae,0,42,0
+Pholisora catullus,0,5,0
+phyleus,1,0,36
+Pieris rapae,0,6,0
+plexippus,1,0,172
+Polygonia interrogationis,0,1,0
+polyxenes,0,0,1
+Pontia protodice,0,67,0
+proterpia,2,0,14
+protodice,3,0,56
+pyracmon,1,0,0
+Pyrgus scriptura,0,4,0
+Pyrisitia proterpia,0,6,0
+rapae,0,0,1
+rumiko,1,0,126
+sara,2,0,0
+sara thoosa,1,0,0
+satyrus,1,0,0
+sennae,3,0,171
+simaethis,0,0,1
+sisymbrii,2,0,0
+Staphylus ceos,0,3,0
+Strymon istapa,0,2,0
+Strymon melinus,0,68,0
+Systasea zampa,0,13,0
+texana,5,0,202
+Texola perse,0,6,0
+tristis,0,0,10
+Unknown sp1,0,0,48
+Urbanus dorantes,0,3,0
+Vanessa annabella,0,10,0
+Vanessa atalanta,0,8,0
+Vanessa cardui,0,234,0
+Vanessa virginiensis,0,4,0
+vanillae,1,0,226
+virginiensis,0,0,4
+zampa,2,0,11
+Zerene cesonia,0,21,0
