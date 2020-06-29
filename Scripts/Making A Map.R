@@ -11,9 +11,9 @@ library(ggplot2)
 library(ggmap)
 library(ggsn)
 
-eBut <- read_csv("eBut.Data.csv")
+eBut <- read_csv("Data/eBut.Data.csv")
 view(eBut)
-iNat <- read_csv("iNaturalist.csv")
+iNat <- read_csv("Data/iNaturalist.csv")
 view(iNat)
 
 #making data frames that only show unique lat/longs for every site
@@ -73,6 +73,7 @@ both_map <- ggmap(la_map) +
   scale_color_manual(values = c("#1133ff", "#000000")) +
   scale_fill_manual(values = c("#ffffff", "#ff8c1a")) +
   scalebar(data = latlong_scale,
+  #line 75 gives me an error that says "transform should be logical error in r"         
            dist = 5,
            location = "bottomleft",
            dd2km = TRUE,
@@ -86,11 +87,10 @@ both_map <- ggmap(la_map) +
         axis.ticks = element_blank()) +
   coord_map(xlim = c(min(eBut$Longitude) - 0.1, max(eBut$Longitude) + 0.1),
             ylim = c(min(eBut$Latitude) - 0.1, max(eBut$Latitude) + 0.1))
-print(both_map)
-
-#line 75 gives me an error that says "transform should be logical error in r"
 #when you remove the scale bar part the cide works up until line 89 where i get a warning that says 
 # "Coordinate system already present. Adding new coordinate system, which will replace the existing one"
+
+print(both_map)
 #then when I go to print the map I get an error that says "Error in loadNamespace(name) : there is no package called ‘mapproj’"
 #also overall for come reason the map is really small like the code makes my polygon but doesnt zoom in
 #to that section of the map so then the dots are all over the place
