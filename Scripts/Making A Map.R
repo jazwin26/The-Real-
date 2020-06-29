@@ -3,6 +3,7 @@
 #jiwinzer@email.arizona.edu 
 #2020/6/22
 
+#I am not sure what this part does
 rm(list = ls())
 
 #loading in data
