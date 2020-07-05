@@ -3,7 +3,7 @@
 #jiwinzer@email.arizona.edu 
 #2020/6/22
 
-#I am not sure what this part does
+#Clean up workspace, removing variables from memory
 rm(list = ls())
 
 #loading in data
@@ -11,11 +11,12 @@ library(tidyverse)
 library(ggplot2)
 library(ggmap)
 library(ggsn)
+library(mapproj)
 
 eBut <- read_csv("Data/eBut.Data.csv")
-view(eBut)
+# view(eBut)
 iNat <- read_csv("Data/iNaturalist.csv")
-view(iNat)
+# view(iNat)
 
 #making data frames that only show unique lat/longs for every site
 latlongs <- unique(eBut[, c("Longitude", "Latitude")])
@@ -23,31 +24,46 @@ latlongs <- unique(eBut[, c("Longitude", "Latitude")])
 latlongs_iNat <- unique(iNat[, c("Longitude", "Latitude")])
 
 #making a single data frame from both sites
+# Start by adding a Source column to each data set
+latlongs$Source <- "Butterfly Walk"
+latlongs_iNat$Source <- "inaturalist"
+# Then combine the two data sets
 latlong_both <- rbind(latlongs, latlongs_iNat)
-latlong_both$Source <- "inaturalist"
-latlong_both$Source[1:nrow(latlongs)] <- "Butterfly Walk"
 
 #making the square for map bounds
-map_bounds <- c(floor(min(eBut$Longitude)),
-                floor(min(eBut$Latitude)),
-                ceiling(max(eBut$Longitude)),
-                ceiling(max(eBut$Latitude)))
+map_bounds <- c(floor(min(latlong_both$Longitude)),
+                floor(min(latlong_both$Latitude)),
+                ceiling(max(latlong_both$Longitude)),
+                ceiling(max(latlong_both$Latitude)))
 names(map_bounds) <- c("left", "bottom", "right", "top")
 
-#truthfully I have no idea what this does which may be part of the problem 
-#i think what is happening is we are pulling a map template from R that will have our box on it
-la_map <- get_map(location = map_bounds,
+# Download a map of the greater tucson area, based on the bounds of our data
+tucson_map <- get_map(location = map_bounds,
                   source = "stamen",
                   maptype = "terrain-lines",
                   color = "bw")
 
-bounds <- data.frame(x = c(rep(min(latlongs$Longitude), times = 2), rep(max(latlongs$Longitude), times = 2)),
-                     y = c(min(latlongs$Latitude), max(latlongs$Latitude), max(latlongs$Latitude), min(latlongs$Latitude)))
+# Create a data frame with x and y limits of the map, the data frame will have
+# four rows and two columns:
+# Row 1: bottom left limit
+# Row 2: top left limit
+# Row 3: bottom right limit
+# Row 4: top right limit
+bounds <- data.frame(x = c(rep(min(latlong_both$Longitude), times = 2), 
+                           rep(max(latlong_both$Longitude), times = 2)),
+                     y = c(min(latlong_both$Latitude), max(latlong_both$Latitude), 
+                           max(latlong_both$Latitude), min(latlong_both$Latitude)))
 
-#so here we have dummy data because that is how ggsn works
-latlong_scale <- latlongs
+# For the scale bar, we need to pass ggsn::scalebar a data frame with the data
+# we used. However, we do not want the scale bar to cover up any of the points, 
+# so we add one extra point (which will not be plotted) to "trick" 
+# ggsn::scalebar into thinking our map is larger. In this new data frame, we 
+# we have to set the Latitude and Longitude column names to "lat" and "long", 
+# respectively, because those are required by ggsn::scalebar
+latlong_scale <- latlong_both[, 1:2]
 colnames(latlong_scale) <- c("long", "lat")
-latlong_scale[nrow(latlong_scale) + 1, ] <- list("long" = -118.425, "lat" = 33.84)
+latlong_scale[nrow(latlong_scale) + 1, ] <- list(long = -111.253,
+                                                 lat = 32.041)
 
 city_labels <- data.frame(names = c("Tucson", "Tohono Chul"),
                           longitude = c(-110.9747, -110.9817),
@@ -55,7 +71,7 @@ city_labels <- data.frame(names = c("Tucson", "Tohono Chul"),
                           sizes = c(7,7))
 
 #now we can finally visualize the map
-both_map <- ggmap(la_map) +
+both_map <- ggmap(tucson_map) +
   geom_polygon(data = bounds,
                mapping = aes(x = x, y = y),
                fill = "#ffffff",
@@ -68,30 +84,29 @@ both_map <- ggmap(la_map) +
            size = city_labels$sizes,
            color = "black") +
   geom_point(data = latlong_both,
-             mapping = aes(x = Longitude, y = Latitude, shape = Source, color = Source, fill = Source),
+             mapping = aes(x = Longitude, 
+                           y = Latitude, 
+                           shape = Source, 
+                           color = Source, 
+                           fill = Source),
              size = 3) +
   scale_shape_manual(values = c(4, 21)) +
   scale_color_manual(values = c("#1133ff", "#000000")) +
   scale_fill_manual(values = c("#ffffff", "#ff8c1a")) +
   scalebar(data = latlong_scale,
-  #line 75 gives me an error that says "transform should be logical error in r"         
-           dist = 5,
+           transform = TRUE,
+           dist = 10, # units of 10 on the scale bar
+           dist_unit = "km",
            location = "bottomleft",
-           dd2km = TRUE,
-           height = 0.03,
-           st.dist = 0.04,
            st.size = 4.5,
+           st.bottom = TRUE,
+           st.dist = 0.05,
            model = "WGS84") +
-  theme(legend.position = c(0.80, 0.11)) +
+  theme(legend.position = c(0.80, 0.15)) +
   theme(axis.title = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank()) +
-  coord_map(xlim = c(min(eBut$Longitude) - 0.1, max(eBut$Longitude) + 0.1),
-            ylim = c(min(eBut$Latitude) - 0.1, max(eBut$Latitude) + 0.1))
-#when you remove the scale bar part the cide works up until line 89 where i get a warning that says 
-# "Coordinate system already present. Adding new coordinate system, which will replace the existing one"
+  coord_map(xlim = c(min(latlong_both$Longitude) - 0.1, max(latlong_both$Longitude) + 0.1),
+            ylim = c(min(latlong_both$Latitude) - 0.1, max(latlong_both$Latitude) + 0.1))
 
 print(both_map)
-#then when I go to print the map I get an error that says "Error in loadNamespace(name) : there is no package called ‘mapproj’"
-#also overall for come reason the map is really small like the code makes my polygon but doesnt zoom in
-#to that section of the map so then the dots are all over the place
