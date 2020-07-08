@@ -46,10 +46,14 @@ new_Az_wide <- new_Az %>%
 
 view(new_Az_wide)
 
+#we moved the data into wide format to make calculations easier in the future
+#then we combined the data that came from eButterfly so we dont have to load in some many files
+#this also makes it easier to run calcultaions later 
 view(full_data <- full_join(new_Andy_wide, new_Az_wide))
 
 full <- (full_data)
 
+#we made csv files from our data frames so we could work with them in R 
 write.csv(full_data, "eBut.Data.csv")
 
 write.csv(new_Andy_wide, "Andy.csv")
