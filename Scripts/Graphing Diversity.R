@@ -12,13 +12,18 @@ library(vegan)
 
 all_data <- read_csv("Data/eBut.Data.csv")
 
-view(all_data)
+# One column (rita) has *only* missing data; remove that column; also, X1 is
+# uninformative (it looks to be rownames written by a save), so we can drop 
+# that one, too
+all_data <- all_data %>%
+  select(-rita, -X1)
 
-#truthfully I have no idea what this does
-knitr::opts_chunk$set(echo = TRUE)
+#view(all_data)
 
 #Calling the columns that hold the species counts
-species.cols <- c(6:88)
+# We use this to subset the data frame for only columns that have abundance 
+# data in them (because this is the input vegan is looking for)
+species.cols <- c(6:86)
 
 #Removing the NA fills and exchnaging them for zeros
 species_data <- all_data[,species.cols]
@@ -26,21 +31,22 @@ species_data[is.na(species_data)] <- 0
 all_data[,species.cols] <- species_data
 
 #We are adding a column to the end of ths all_data data frame
-#This column is filled with the average number of times a count comes up at each site
+# This column is filled with the shannon diversity for that row (Shannon's 
+# diversity for each site for each day)
 all_data$Diversity <- apply(X = all_data[, species.cols],
                             MARGIN = 1,
                             FUN = function(x) {
                               vegan::diversity(x = x, index = "shannon")
                             })
 
-#This makes a data frame that we will later fill with our t-test data
-eBut_Diversity <- all_data[, c("X1", "Site", "Diversity")]
-eBut_Diversity <- eBut_Diversity %>%
-  spread(Site, Diversity)
+#Pull out only the site and the diversity score for t-test
+eBut_Diversity <- all_data %>%
+  select(Site, Diversity)
 
-#Here we are running a t-test that will compare the means of the butterflies seen at our two sites
-deBut.t.test <- t.test(x = eBut_Diversity$eBut,
-                       y = eBut_Diversity$`Tohono Chul`,
+#Here we are running a t-test that will compare the means of the butterflies 
+# seen at our two sites
+deBut.t.test <- t.test(x = eBut_Diversity$Diversity[eBut_Diversity$Site == "eBut"],
+                       y = eBut_Diversity$Diversity[eBut_Diversity$Site == "Tohono Chul"],
                        paired = FALSE)
 
 #Store the t value from the t-test as a makeshift data frame
@@ -53,7 +59,7 @@ if(deBut.t.test$p.value > 0.001) {
   deBut.p <- round(deBut.t.test$p.value, 3)
 }
 
-#Store the difference in means that was calculated in the t-tes
+#Store the difference in means that was calculated in the t-test
 deBut.estimate <- round(deBut.t.test$estimate, 3)
 
 #Store the means for each site that were calculated in the t-test
@@ -61,35 +67,13 @@ deBut.means <- all_data %>%
   group_by(Site) %>%
   summarise(means = round(mean(Diversity), 3))
 
-deBut.means
+# deBut.means
 
-#Here we need to be reformated to we can use it to make a graph in ggplot
-all_data_long <- all_data[, c("Site", "Diversity")] %>%
-  gather(key = "statistic",
-         value = "value",
-         -Site)
-
-#Reorder your data for better visulatization 
-all_data_long$Site <- factor(all_data_long$Site,
-                             levels = c("eBut", "Tohono Chul"))
-
-all_data_long$statistic <- factor(all_data_long$statistic,
-                                  levels = c("Diversity"))
-
-#Make the bar chart with two columns
-Diversity_plot <- ggplot(all_data_long, 
-                         mapping = aes(x = Site, y = value)) +
-  geom_bar(stat = "identity")+
-#so geom_bar() works but it doesnt graph the values from the t-test it graphs the counts for each site which is not what I want
-#geom_col() does the same thing as geom_bar
-#geom_bar(stat = "identity") also does the same thing
-#so ya see there is no error just for some reason my visual isnt working
-  facet_wrap(~ statistic,
-             scales = "free_y",
-             strip.position = "left",
-             labeller = as_labeller(c(Diversity = "Diversity~(italic(H))"),
-                                    label_parsed)) +
-  theme_bw() +
+# Create a boxplot of diversity scores; an alternative approach would be a
+# violin plot (replace geom_boxplot() with geom_violin())
+Diversity_plot <- ggplot(data = eBut_Diversity,
+                         mapping = aes(x = Site, y = Diversity)) +
+  geom_boxplot() +
   ylab(NULL) +
   xlab(NULL) +
   theme_minimal()
